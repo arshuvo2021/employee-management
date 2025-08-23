@@ -19,10 +19,18 @@ class EmployeeController extends Controller
     }
 
     public function store(Request $request)
-    {
-        Employee::create($request->all());
-        return redirect()->route('employees.index')->with('success', 'Employee created successfully.');
-    }
+{
+    $request->validate([
+        'name' => 'required|min:3',
+        'email' => 'required|email|unique:employees,email',
+        'department' => 'required',
+        'salary' => 'required|numeric|min:1',
+    ]);
+
+    Employee::create($request->all());
+
+    return redirect()->route('employees.index')->with('success', 'Employee created successfully.');
+}
 
     public function edit(Employee $employee)
     {
@@ -30,10 +38,18 @@ class EmployeeController extends Controller
     }
 
     public function update(Request $request, Employee $employee)
-    {
-        $employee->update($request->all());
-        return redirect()->route('employees.index')->with('success', 'Employee updated successfully.');
-    }
+{
+    $request->validate([
+        'name' => 'required|min:3',
+        'email' => 'required|email|unique:employees,email,' . $employee->id,
+        'department' => 'required',
+        'salary' => 'required|numeric|min:1',
+    ]);
+
+    $employee->update($request->all());
+
+    return redirect()->route('employees.index')->with('success', 'Employee updated successfully.');
+}
 
     public function destroy(Employee $employee)
     {
