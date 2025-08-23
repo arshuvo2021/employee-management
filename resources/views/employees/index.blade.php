@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-    <a href="#" class="btn btn-primary mb-3">Add Employee</a>
+    <a href="{{ route('employees.create') }}" class="btn btn-primary mb-3">Add Employee</a>
 
     <table class="table table-bordered">
         <thead>
@@ -21,8 +21,8 @@
                     <td>{{ $employee->department }}</td>
                     <td>{{ $employee->salary }}</td>
                     <td>
-                        <a href="#" class="btn btn-sm btn-warning">Edit</a>
-                        <form action="#" method="POST" style="display:inline;">
+                        <a href="{{ route('employees.edit', $employee->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="{{ route('employees.destroy', $employee->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-sm btn-danger" onclick="return confirm('Delete this employee?')">Delete</button>
