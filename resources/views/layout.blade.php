@@ -11,10 +11,20 @@
     <h2 class="mb-4">Employee Management System</h2>
 
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div id="flash-message" class="alert alert-success">{{ session('success') }}</div>
     @endif
 
     @yield('content')
 
+    <script>
+        setTimeout(() => {
+            const msg = document.getElementById('flash-message');
+            if(msg){
+                msg.style.transition = "opacity 0.5s";
+                msg.style.opacity = '0';
+                setTimeout(() => msg.remove(), 500);
+            }
+        }, 3000);
+    </script>
 </body>
 </html>

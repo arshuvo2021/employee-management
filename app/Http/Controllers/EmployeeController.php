@@ -7,11 +7,21 @@ use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
-    public function index()
-    {
-        $employees = Employee::all();
-        return view('employees.index', compact('employees'));
+    public function index(Request $request)
+{
+    $query = Employee::query();
+
+    if ($request->filled('search')) {
+        $search = $request->input('search');
+        $query->where('name', 'like', "%{$search}%")
+              ->orWhere('department', 'like', "%{$search}%");
     }
+
+    $employees = $query->orderBy('id', 'desc')->paginate(10);
+
+    return view('employees.index', compact('employees'));
+}
+
 
     public function create()
     {
@@ -21,7 +31,7 @@ class EmployeeController extends Controller
     public function store(Request $request)
 {
     $request->validate([
-        'name' => 'required|min:3',
+        'name' => 'required|string|min:3',
         'email' => 'required|email|unique:employees,email',
         'department' => 'required',
         'salary' => 'required|numeric|min:1',
@@ -40,7 +50,7 @@ class EmployeeController extends Controller
     public function update(Request $request, Employee $employee)
 {
     $request->validate([
-        'name' => 'required|min:3',
+        'name' => 'required|string|min:3',
         'email' => 'required|email|unique:employees,email,' . $employee->id,
         'department' => 'required',
         'salary' => 'required|numeric|min:1',

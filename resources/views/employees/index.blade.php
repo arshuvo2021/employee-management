@@ -1,7 +1,14 @@
 @extends('layout')
 
 @section('content')
-    <a href="{{ route('employees.create') }}" class="btn btn-primary mb-3">Add Employee</a>
+    <div class="d-flex justify-content-between mb-3">
+        <a href="{{ route('employees.create') }}" class="btn btn-primary">Add Employee</a>
+
+        <form action="{{ route('employees.index') }}" method="GET" class="d-flex">
+            <input type="text" name="search" class="form-control me-2" placeholder="Search name/department" value="{{ request('search') }}">
+            <button class="btn btn-secondary">Search</button>
+        </form>
+    </div>
 
     <table class="table table-bordered">
         <thead>
@@ -34,4 +41,6 @@
             @endforelse
         </tbody>
     </table>
+
+    {{ $employees->withQueryString()->links() }}
 @endsection
